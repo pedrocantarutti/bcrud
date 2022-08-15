@@ -1,13 +1,19 @@
+########################################################
+#  $File: api.py
+#  $Date: 14/08/2022
+#  $Creator: Pedro Cantarutti
+########################################################
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from routes.routes import api
+from models.user import db
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crud.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object('config')
+db.init_app(app)
+app.register_blueprint(api)
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__=='__main__':
+    app.debug = True
+    app.run()
