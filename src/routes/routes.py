@@ -14,7 +14,7 @@ from models.user import User
 # TODO(pac):
 # - Define routes for:
 #	* Create user - DONE
-#	* Delete user (only admins) -
+#	* Delete user - DONE
 #	* Update user (only admins) - 
 #	* Retrieve user data - DONE
 #	* List all user - DONE
@@ -25,12 +25,15 @@ api = Blueprint('api', __name__)
 
 @api.route("/v1", methods=["GET"])
 def home():
-    return jsonify(), 200
+    return jsonify({"Message": "Basic CRUD API.", "Result": True}), 200
 
 
 @api.route("/v1/user/list", methods=["GET"])
 def get_users():
-    return jsonify(), 200
+    users = User.query.all()
+    if users:
+        return jsonify([repr(user) for user in users]), 200
+    return jsonify({"Message": "No users found.", "Result": True}), 404
 
 
 @api.route("/v1/user/<int:id>", methods=["GET"])
