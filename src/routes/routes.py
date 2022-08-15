@@ -9,7 +9,7 @@ from flask import Blueprint
 from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 from models.user import User
-from utils import check_if_user_exist, generate_token
+from utils import check_if_user_exist, generate_token, can_access
 
 
 # TODO(pac):
@@ -70,6 +70,7 @@ def create_user():
 
 
 @api.route("/v1/user/<int:id>", methods=["DELETE"])
+@can_access
 def delete_user(id):
     user = User.query.get(id)
     if user:
@@ -86,6 +87,7 @@ def delete_user(id):
 
 
 @api.route("/v1/user/<int:id>", methods=["PUT"])
+@can_access
 def update_user(id):
     user = User.query.get(id)
     if user is None:
