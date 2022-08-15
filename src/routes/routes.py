@@ -9,6 +9,7 @@ from flask import Blueprint
 from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 from models.user import User
+from utils import check_if_user_exist
 
 
 # TODO(pac):
@@ -38,12 +39,34 @@ def get_users():
 
 @api.route("/v1/user/<int:id>", methods=["GET"])
 def get_user(id):
-    return jsonify(), 200
+    user = User.query.get(id)
+    if user:
+        return jsonify({"cpf": user.cpf,
+                        "password": user.password,
+                        "role": user.role,
+                        "create_on": user.created_on,
+                        "updated_on": user.updated_on}), 200
+    return jsonify({"Message": "User not found.", "Result": True}), 404
 
 
 @api.route("/v1/user", methods=["POST"])
 def create_user():
-    return jsonify(), 200
+    if not request.json:
+        abort(400)
+    user = check_if_user_exist(request.json.get("cpf"))
+    if user:
+        return jsonify({"Message": "User already exists.", "Result": True}), 200
+    user = User(
+        cpf=request.json.get("cpf"),
+        password=request.json.get("password"),
+        role=request.json.get("role")
+    )
+    try:
+        db.session.add(user)
+        db.session.commit()
+        return jsonify(repr(user)), 201
+    except:
+        return jsonify({"Message": "Unable to create user.", "Result": False}), 500
 
 
 @api.route("/v1/user/<int:id>", methods=["DELETE"])
