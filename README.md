@@ -8,11 +8,15 @@ Basic CRUD API written in Python3 with Flask and SQLite.
 * API is running on a linode server.
 - http://45.79.46.165:9000/v1
 
+# Endpoint home
+
+`GET /v1`
+
 # Endpoint de usuários
 
 ### Listar todos usuários
 
-`GET /v1/users`
+`GET /v1/user/list`
 
 
 ### Retornar um usuário especifico
