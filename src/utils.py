@@ -22,8 +22,8 @@ def check_if_user_exist(cpf):
 
 
 def generate_token(cpf):
-    """ Generates JWT token and sets expiration date to 5 min """
-    expiration_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=5)
+    """ Generates JWT token and sets expiration date to 10 min """
+    expiration_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=10)
     jtoken = jwt.encode(
         {
             "cpf": cpf,
@@ -48,5 +48,5 @@ def can_access(func):
             return jsonify({"Message": "Token expired, you need log in again.", "Result": False}), 403
         except jwt.InvalidTokenError:
             return jsonify({"Message": "Invalid token. Please log in again.","Result": False}), 403
-        return func(*args, **kwargs)
+        return func(user, *args, **kwargs)
     return wrapper

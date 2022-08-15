@@ -9,6 +9,7 @@ from flask import Blueprint
 from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 from models.user import User
+from models.user import db
 from utils import check_if_user_exist, generate_token, can_access
 
 
@@ -20,7 +21,6 @@ from utils import check_if_user_exist, generate_token, can_access
 #	* Retrieve user data - DONE
 #	* List all user - DONE
 
-db = SQLAlchemy()
 api = Blueprint('api', __name__)
 
 
@@ -71,11 +71,12 @@ def create_user():
 
 @api.route("/v1/user/<int:id>", methods=["DELETE"])
 @can_access
-def delete_user(id):
+def delete_user(request_user, id):
     user = User.query.get(id)
     if user:
         try:
-            if not user.role:
+            print(request_user, request_user.role)
+            if request_user.role:
                 db.session.delete(user)
                 db.session.commit()
                 return jsonify({"Message": f"User {id} successfully deleted.", "Result": True}), 200 # perhaps change result from boolean to real data
@@ -88,20 +89,21 @@ def delete_user(id):
 
 @api.route("/v1/user/<int:id>", methods=["PUT"])
 @can_access
-def update_user(id):
+def update_user(request_user, id):
     user = User.query.get(id)
     if user is None:
         return jsonify({"Message": "User not found", "Result": False}), 404
-    if user.role:
-       user.cpf = request.json.get("cpf", user.cpf)
-       user.password = request.json.get("password", user.password)
-       user.role = request.json.get("role", user.role)
-       user.updated_on = datetime.datetime.now()
-       try:
-           db.session.commit()
-       except exc.IntegrityError:
-           return jsonify({"Message": "Integrity error: user already exists with data.", "Result": True}), 400
-       return jsonify({"Message": f"User {id} successfully updated.", "Result": True}), 201
+    if request_user.role:
+        print(request_user, request_user.role)
+        user.cpf = request.json.get("cpf", user.cpf)
+        user.password = request.json.get("password", user.password)
+        user.role = request.json.get("role", user.role)
+        user.updated_on = datetime.datetime.now()
+        try:
+            db.session.commit()
+            return jsonify({"Message": f"User {id} successfully updated.", "Result": True}), 201
+        except exc.IntegrityError:
+            return jsonify({"Message": "Integrity error: user already exists with data.", "Result": True}), 400
     else:
         return jsonify({"Message": "Only admins can update users.", "Result": True}), 401
 
