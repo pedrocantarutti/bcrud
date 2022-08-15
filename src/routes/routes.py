@@ -33,7 +33,7 @@ def home():
 def get_users():
     users = User.query.all()
     if users:
-        return jsonify([repr(user) for user in users]), 200
+        return jsonify([user.serialize for user in users]), 200
     return jsonify({"Message": "No users found.", "Result": True}), 404
 
 
