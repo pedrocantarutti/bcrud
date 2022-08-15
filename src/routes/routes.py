@@ -71,12 +71,37 @@ def create_user():
 
 @api.route("/v1/user/<int:id>", methods=["DELETE"])
 def delete_user(id):
-    return jsonify(), 200
+    user = User.query.get(id)
+    if user:
+        try:
+            if not user.role:
+                db.session.delete(user)
+                db.session.commit()
+                return jsonify({"Message": f"User {id} successfully deleted.", "Result": True}), 200 # perhaps change result from boolean to real data
+            else:
+                return jsonify({"Message": f"Only admins can delete users.", "Result": True}), 200 # perhaps change result from boolean to real data
+        except:
+            return jsonify({"Message": "Unable to delete user.", "Result": False}), 500
+    return jsonify({"Message": "User not found.", "Result": True}), 404
 
 
 @api.route("/v1/user/<int:id>", methods=["PUT"])
 def update_user(id):
-    return jsonify(), 200
+    user = User.query.get(id)
+    if user is None:
+        return jsonify({"Message": "User not found", "Result": False}), 404
+    if user.role:
+       user.cpf = request.json.get("cpf", user.cpf)
+       user.password = request.json.get("password", user.password)
+       user.role = request.json.get("role", user.role)
+       user.updated_on = datetime.datetime.now()
+       try:
+           db.session.commit()
+       except exc.IntegrityError:
+           return jsonify({"Message": "Integrity error: user already exists with data.", "Result": True}), 400
+       return jsonify({"Message": f"User {id} successfully updated.", "Result": True}), 201
+    else:
+        return jsonify({"Message": "Only admins can update users.", "Result": True}), 401
 
 
 @api.route("/v1/login", methods=["POST"])
