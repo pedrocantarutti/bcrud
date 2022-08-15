@@ -1,5 +1,5 @@
 ########################################################
-#  $File: models.py
+#  $File: user.py
 #  $Date: 14/08/2022
 #  $Creator: Pedro Cantarutti
 ########################################################
@@ -25,3 +25,16 @@ class User(db.Model):
         self.cpf = cpf
         self.password = password # use bcrypt later on to generate password hash
         self.role = role
+
+    def __repr__(self):
+        return f'User {self.cpf} create on {self.created_on}'
+
+    @property
+    def serialize(self):
+        return {
+            'cpf': self.cpf,
+            'password': self.password,
+            'role': self.role,
+            'created_on': self.created_on,
+            'updated_on': self.updated_on
+        }
