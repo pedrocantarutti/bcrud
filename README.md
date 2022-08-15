@@ -75,21 +75,31 @@ Basic CRUD API written in Python3 with Flask and SQLite.
   * Param: token
   * Body:
    ```json
-   
+   {
+    "cpf":"20",
+    "password": "19110",
+    "role": true
+   }
    ```
 * Response:
 ```json
-
+{
+    "Message": "User 1 successfully updated.",
+    "Result": true
+}
 ```
 
 ### Deletar usuário
 
 `DELETE /v1/user/<id>`
-* Request: /v1/user/1
+* Request: /v1/user/2
   * Param: token 
 * Response:
 ```json
-
+{
+    "Message": "User 2 successfully deleted.",
+    "Result": true
+}
 ```
 
 ### Autenticação do token com servidor JWT
