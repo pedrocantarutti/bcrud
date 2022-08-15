@@ -1,0 +1,3 @@
+https://flask.palletsprojects.com/en/2.2.x/quickstart/
+http://exploreflask.com/en/latest/blueprints.html
+https://pyjwt.readthedocs.io/en/stable/
