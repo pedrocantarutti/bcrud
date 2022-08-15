@@ -5,6 +5,18 @@ Basic CRUD API written in Python3 with Flask and SQLite.
 
 ## Usage
 
+### Run locally
+- First you need to create your virtual enviorment and then clone this repo.
+- Install the requirements: pip install -r requirements.txt
+- cd to src folder and run flask shell to create the database
+  - from app import db
+  - db.create_all()
+  - exit()
+- Now to run the app do the following:
+  - export FLASK_APP=app.py
+  - flask run     
+
+### Tests
 * API is running on a linode server.
 - http://45.79.46.165:9000/v1
 - Examples of requests and responses can be seen in Postman JSON file.
