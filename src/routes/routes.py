@@ -9,7 +9,7 @@ from flask import Blueprint
 from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 from models.user import User
-from utils import check_if_user_exist
+from utils import check_if_user_exist, generate_token
 
 
 # TODO(pac):
@@ -106,4 +106,16 @@ def update_user(id):
 
 @api.route("/v1/login", methods=["POST"])
 def login():
-    return jsonify(), 200
+    if not request.json:
+        return jsonify({"Message": "Bad request.", "Result": False}), 400
+    cpf = request.json.get("cpf")
+    password = request.json.get("password")
+    user = check_if_user_exist(cpf)
+    if user:
+        jtoken, expiration_date = generate_token(user.cpf)
+        return jsonify({
+            "Message": f"User {user.id} is logged in.",
+            "Result": True,
+            "token": jtoken,
+            "expiration_date": expiration_date}), 200
+    return jsonify({"Message": "User not found.", "Result": False}), 401
