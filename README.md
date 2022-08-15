@@ -20,15 +20,7 @@ Basic CRUD API written in Python3 with Flask and SQLite.
 
 `GET /v1/user/list`
 * Response: 
-[
-    {
-        "cpf": "12332112356",
-        "created_on": "Sun, 14 Aug 2022 13:24:35 GMT",
-        "password": "3",
-        "role": true,
-        "updated_on": "Mon, 15 Aug 2022 02:01:05 GMT"
-    },
-]
+![Screen Shot 2022-08-15 at 14 53 53](https://user-images.githubusercontent.com/4164887/184689015-6f350aff-dfde-4191-a17e-b018db3a14c7.png)
 
 
 ### Retornar um usuário especifico
@@ -36,13 +28,7 @@ Basic CRUD API written in Python3 with Flask and SQLite.
 `GET /v1/user/<id>`
 * Request: /v1/user/6
 * Response:
-{
-    "cpf": "20",
-    "create_on": "Mon, 15 Aug 2022 10:36:38 GMT",
-    "password": "1",
-    "role": false,
-    "updated_on": "Mon, 15 Aug 2022 10:36:38 GMT"
-}
+![Screen Shot 2022-08-15 at 14 53 14](https://user-images.githubusercontent.com/4164887/184688922-0f7b7603-2310-448f-891e-8af4b7bfa08d.png)
 
 
 ### Registrando novo usuário
